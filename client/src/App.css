@@ -1,3 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
+* {
+  font-family: "Roboto Mono";
+}
+
+h1, h2, h5 {
+  font-weight: bold;
+}
+
 .App {
   background-color: #b3c3ce;
 }

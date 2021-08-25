@@ -21,7 +21,6 @@ class App extends React.Component {
     this.state = {
       countries: [],
       show: false,
-      errors: '',
       validated: false,
 
       formData: {
@@ -153,39 +152,35 @@ class App extends React.Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault();
-
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     }
-
     this.setState({validated: true});
 
-    // let errorMessage = this.state.errors;
+    const formInput = this.state.formData;
 
-    // const formInput = this.state.formData;
-
-    // fetch('______________________', formInput, {crossDomain: true})
-    // .then((res) => {
-    //   console.log(res.data);
-    //   if (res.status === 200) {
-    //     alert("Registered Successfully");
-    //     // redirection
-    //   }
-    //   else {
-    //     console.log(res.data);
-    //   }
-    // })
-    // .catch(error => {
-    //   if(error.response){ 
-    //     errorMessage = "Couldn't register.";
-    //     this.setState({errors: errorMessage});
-    //     console.log(error.response.data);
-    //     alert(error.response.data.detail);
-    //   }
-    // });
+    fetch('/api', {
+      method: 'POST',
+      body: JSON.stringify({ formInput }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((res) => {
+      console.log(res.data);
+      if (res.status === 200) {
+        alert("Registered Successfully");
+        // redirection
+      }
+      else {
+        console.log(res.data);
+      }
+    })
+    .catch(error => {
+      if(error.response){ 
+        alert("Couldn't register, please contact: e.kulla@jacobs-university.de");
+      }
+    });
   }
 
   render() {
@@ -585,7 +580,7 @@ class App extends React.Component {
                   </Button>
                   
                   <Button variant="primary" size="lg" type="submit" onClick={this.handleSubmit}>
-                    Submit
+                    Register Now
                   </Button>
                 </ListGroup.Item>
               </ListGroup>
