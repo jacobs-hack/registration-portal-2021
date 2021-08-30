@@ -24,7 +24,7 @@ mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     }).then(() => console.log('Database connected!'))
-    .catch(error => console.log('Failed to connect to MongoDB!', error))
+    .catch(error => console.log('Failed to connect to MongoDB!', error));
 
 //listening on a port 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -4,6 +4,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Form, FloatingLabel, Card, ListGroup, Row, Col, Button, Image, Modal } from 'react-bootstrap';
 import jhlogo from './jh-logo-colored.png';
 import Terms from './Terms.js';
+import axios from 'axios';
 
 /*
 
@@ -71,32 +72,33 @@ class App extends React.Component {
     };
 
     this.handleShow = this.handleShow.bind(this);
-		this.handleClose = this.handleClose.bind(this);
-		this.inputChanged = this.inputChanged.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.inputChanged = this.inputChanged.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     fetch("https://restcountries.eu/rest/v2/all")
-    .then(response => response.json())
-    .then(response => {
-      this.setState({countries: response});
-      // console.log(this.state.countries);
-    })
-    .catch(err => { console.log(err); 
-    });
+      .then(response => response.json())
+      .then(response => {
+        this.setState({ countries: response });
+        // console.log(this.state.countries);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   handleClose() {
-		this.setState({ show: false });
-	}
+    this.setState({ show: false });
+  }
 
-	handleShow() {
-		this.setState({ show: true });
-	}
+  handleShow() {
+    this.setState({ show: true });
+  }
 
   inputChanged(e) {
-    this.setState({errors: null});
+    this.setState({ errors: null });
 
     const formInput = this.state.formData;
     if (e.target.name === "onCampus") {
@@ -147,40 +149,49 @@ class App extends React.Component {
       formInput[e.target.name] = e.target.value;
     }
 
-    this.setState({formData: formInput});
+    this.setState({ formData: formInput });
     console.log(formInput);
   }
 
   handleSubmit(e) {
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    this.setState({validated: true});
+    e.preventDefault();
+    //posting the data
+    axios.post('http://localhost:5000/api/signup', this.state.formData)
+      .then(response => console.log('Registered successfully', response))
+      //redirect
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
 
-    const formInput = this.state.formData;
+    //the code below gave me an error
 
-    fetch('/api', {
-      method: 'POST',
-      body: JSON.stringify({ formInput }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-    .then((res) => {
-      console.log(res.data);
-      if (res.status === 200) {
-        alert("Registered Successfully");
-        // redirection
-      }
-      else {
-        console.log(res.data);
-      }
-    })
-    .catch(error => {
-      if(error.response){ 
-        alert("Couldn't register, please contact: e.kulla@jacobs-university.de");
-      }
-    });
+    // const form = e.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    // }
+    // this.setState({ validated: true });
+
+    // fetch('http://localhost:5000/api/signup', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ this.state.formData }),
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     if (res.status === 200) {
+    //       alert("Registered Successfully");
+    //       // redirection
+    //     }
+    //     else {
+    //       console.log(res.data);
+    //     }
+    //   })
+    //   .catch(error => {
+    //     if (error.response) {
+    //       alert("Couldn't register, please contact: e.kulla@jacobs-university.de");
+    //     }
+    //   });
   }
 
   render() {
@@ -190,11 +201,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <div id="img-cont">
-          <Image src={jhlogo} id="logo"/>
+          <Image src={jhlogo} id="logo" />
         </div>
 
         <div id="intro-text">
-          <h1 style={{paddingTop:20}}>jacobsHack! 2021</h1>
+          <h1 style={{ paddingTop: 20 }}>jacobsHack! 2021</h1>
           <h2>Registration Form</h2>
         </div>
 
@@ -206,7 +217,7 @@ class App extends React.Component {
                   <h5 className="mb-3 pt-2">Demographics</h5>
 
                   <FloatingLabel label="Full Name *" className="mb-3">
-                    <Form.Control type="text" placeholder="Full Name" name="fullname" required value={this.state.formData.fullname} onChange={this.inputChanged}/>
+                    <Form.Control type="text" placeholder="Full Name" name="fullname" required value={this.state.formData.fullname} onChange={this.inputChanged} />
                     <Form.Text className="text-muted">
                       Please write your name as it appears on your passport
                     </Form.Text>
@@ -216,7 +227,7 @@ class App extends React.Component {
                   </FloatingLabel>
 
                   <FloatingLabel label="Birthday *" className="mb-3">
-                    <Form.Control type="date" placeholder="DD/MM/YYYY" required name="birthday" value={this.state.formData.birthday} onChange={this.inputChanged}/>
+                    <Form.Control type="date" placeholder="DD/MM/YYYY" required name="birthday" value={this.state.formData.birthday} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide your birthday.
                     </Form.Control.Feedback>
@@ -236,7 +247,7 @@ class App extends React.Component {
                         </Form.Control.Feedback>
                       </FloatingLabel>
                     </Col>
-                    
+
                     <Col md>
                       <FloatingLabel label="Pronouns *" className="mb-3">
                         <Form.Select aria-label="Pronouns" name="pronouns" required value={this.state.formData.pronouns} onChange={this.inputChanged}>
@@ -258,7 +269,7 @@ class App extends React.Component {
                       <FloatingLabel label="Nationality *" className="mb-3">
                         <Form.Select aria-label="Nationality" name="nationality" required value={this.state.formData.nationality} onChange={this.inputChanged}>
                           <option value="" disabled>Select Country</option>
-                          { (this.state.countries !== null || this.state.countries !== '') ?
+                          {(this.state.countries !== null || this.state.countries !== '') ?
                             this.state.countries.map(country => (
                               <option value={country.alpha2Code} key={count1++}>{country.name}</option>
                             )) : null
@@ -269,7 +280,7 @@ class App extends React.Component {
                         </Form.Control.Feedback>
                       </FloatingLabel>
                     </Col>
-                    
+
                     <Col md>
                       <FloatingLabel label="Ethnicity *" className="mb-3">
                         <Form.Select aria-label="Ethnicity" name="ethnicity" required value={this.state.formData.ethnicity} onChange={this.inputChanged}>
@@ -294,9 +305,9 @@ class App extends React.Component {
                   <h5 className="mb-3 pt-2">Contact Details</h5>
 
                   <div className="mb-3">
-                    <Form.Label>Do you live on Campus? *</Form.Label><br/>
-                    <Form.Check inline label="Yes" value="Yes" type="radio" name="onCampus" onChange={this.inputChanged} required/>
-                    <Form.Check inline label="No" value="No" type="radio" name="onCampus" onChange={this.inputChanged}/>
+                    <Form.Label>Do you live on Campus? *</Form.Label><br />
+                    <Form.Check inline label="Yes" value="Yes" type="radio" name="onCampus" onChange={this.inputChanged} required />
+                    <Form.Check inline label="No" value="No" type="radio" name="onCampus" onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please select an answer.
                     </Form.Control.Feedback>
@@ -316,18 +327,18 @@ class App extends React.Component {
                             </Form.Select>
                           </FloatingLabel>
                         </Col>
-                        
+
                         <Col md>
                           <FloatingLabel label="Room Number" className="mb-3">
-                            <Form.Control type="text" placeholder="XX" name="room" value={this.state.formData.room} onChange={this.inputChanged}/>
+                            <Form.Control type="text" placeholder="XX" name="room" value={this.state.formData.room} onChange={this.inputChanged} />
                           </FloatingLabel>
                         </Col>
                       </Row>
                       : null
                   }
-                  
+
                   <FloatingLabel label="Street Address *" className="mb-3">
-                    <Form.Control type="text" placeholder="Campus Ring 1" required name="street" value={this.state.formData.street} onChange={this.inputChanged}/>
+                    <Form.Control type="text" placeholder="Campus Ring 1" required name="street" value={this.state.formData.street} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide your street address.
                     </Form.Control.Feedback>
@@ -336,16 +347,16 @@ class App extends React.Component {
                   <Row>
                     <Col md>
                       <FloatingLabel label="ZIP Code *" className="mb-3">
-                        <Form.Control type="number" placeholder="28759" name="zip" required value={this.state.formData.zip} onChange={this.inputChanged}/>
+                        <Form.Control type="number" placeholder="28759" name="zip" required value={this.state.formData.zip} onChange={this.inputChanged} />
                         <Form.Control.Feedback type="invalid">
                           Please provide your zip code.
                         </Form.Control.Feedback>
                       </FloatingLabel>
                     </Col>
-                    
+
                     <Col md>
                       <FloatingLabel label="City *" className="mb-3">
-                        <Form.Control type="text" placeholder="Bremen" name="city" required value={this.state.formData.city} onChange={this.inputChanged}/>
+                        <Form.Control type="text" placeholder="Bremen" name="city" required value={this.state.formData.city} onChange={this.inputChanged} />
                         <Form.Control.Feedback type="invalid">
                           Please provide your city of residence.
                         </Form.Control.Feedback>
@@ -356,7 +367,7 @@ class App extends React.Component {
                       <FloatingLabel label="Country *" className="mb-3">
                         <Form.Select aria-label="Country" name="country" required value={this.state.formData.country} onChange={this.inputChanged}>
                           <option value="0" disabled>Select Country</option>
-                          { (this.state.countries !== null || this.state.countries !== '') ?
+                          {(this.state.countries !== null || this.state.countries !== '') ?
                             this.state.countries.map(country => (
                               <option value={country.alpha2Code} key={count2++}>{country.name}</option>
                             )) : null
@@ -370,14 +381,14 @@ class App extends React.Component {
                   </Row>
 
                   <FloatingLabel label="Email Address *" className="mb-3">
-                    <Form.Control type="email" placeholder="example@email.com" name="email" required value={this.state.formData.email} onChange={this.inputChanged}/>
+                    <Form.Control type="email" placeholder="example@email.com" name="email" required value={this.state.formData.email} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide your email.
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
                   <FloatingLabel label="Phone Number" className="mb-3">
-                    <Form.Control type="text" placeholder="+491234567890" name="phone" value={this.state.formData.phone} onChange={this.inputChanged}/>
+                    <Form.Control type="text" placeholder="+491234567890" name="phone" value={this.state.formData.phone} onChange={this.inputChanged} />
                   </FloatingLabel>
                 </ListGroup.Item>
 
@@ -385,7 +396,7 @@ class App extends React.Component {
                   <h5 className="mb-3 pt-2">Education</h5>
 
                   <FloatingLabel label="University *" className="mb-3">
-                    <Form.Control type="text" placeholder="Jacobs University Bremen" name="university" required value={this.state.formData.university} onChange={this.inputChanged}/>
+                    <Form.Control type="text" placeholder="Jacobs University Bremen" name="university" required value={this.state.formData.university} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide your university.
                     </Form.Control.Feedback>
@@ -409,7 +420,7 @@ class App extends React.Component {
 
                     <Col md>
                       <FloatingLabel label="Major *" className="mb-3">
-                        <Form.Control type="text" placeholder="Computer Science" name="major" required value={this.state.formData.major} onChange={this.inputChanged}/>
+                        <Form.Control type="text" placeholder="Computer Science" name="major" required value={this.state.formData.major} onChange={this.inputChanged} />
                         <Form.Control.Feedback type="invalid">
                           Please provide your major.
                         </Form.Control.Feedback>
@@ -418,7 +429,7 @@ class App extends React.Component {
                   </Row>
 
                   <FloatingLabel label="Graduation Year *" className="mb-3">
-                    <Form.Control type="number" placeholder="2021" name="gradYear" required value={this.state.formData.gradYear} onChange={this.inputChanged}/>
+                    <Form.Control type="number" placeholder="2021" name="gradYear" required value={this.state.formData.gradYear} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide your graduation year.
                     </Form.Control.Feedback>
@@ -429,9 +440,9 @@ class App extends React.Component {
                   <h5 className="mb-3 pt-2">Experience</h5>
 
                   <div className="mb-3">
-                    <Form.Label>Have you attended any hackathon(s) before? *</Form.Label><br/>
-                    <Form.Check inline label="Yes" value="Yes" type="radio" name="exp" onChange={this.inputChanged} required/>
-                    <Form.Check inline label="No" value="No" type="radio" name="exp" onChange={this.inputChanged}/>
+                    <Form.Label>Have you attended any hackathon(s) before? *</Form.Label><br />
+                    <Form.Check inline label="Yes" value="Yes" type="radio" name="exp" onChange={this.inputChanged} required />
+                    <Form.Check inline label="No" value="No" type="radio" name="exp" onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please select an answer.
                     </Form.Control.Feedback>
@@ -440,65 +451,65 @@ class App extends React.Component {
                   {
                     (this.state.formData.exp === true) ?
                       <FloatingLabel label="Which one(s), and what year(s) did you attend it/them?" className="mb-3">
-                        <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="prevHack" value={this.state.formData.prevHack} onChange={this.inputChanged}/>
+                        <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="prevHack" value={this.state.formData.prevHack} onChange={this.inputChanged} />
                       </FloatingLabel>
                       : null
                   }
 
                   <FloatingLabel label="Why did you choose to apply for jacobsHack! 2021? *" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="whyApply" required value={this.state.formData.whyApply} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="whyApply" required value={this.state.formData.whyApply} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide an answer.
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
                   <FloatingLabel label="What drives you to participate in hackathons?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="drive" value={this.state.formData.drive} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="drive" value={this.state.formData.drive} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="What inspires you? How do you express your creativity?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="creativity" value={this.state.formData.creativity} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="creativity" value={this.state.formData.creativity} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="What is your desired role in the hackathon? *" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="role" required value={this.state.formData.role} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="role" required value={this.state.formData.role} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide an answer.
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
                   <FloatingLabel label="What is your strength when working with people?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="strength" value={this.state.formData.strength} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="strength" value={this.state.formData.strength} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="What are your weaknesses?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="weakness" value={this.state.formData.weakness} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="weakness" value={this.state.formData.weakness} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="What have you built before?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="built" value={this.state.formData.built} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="built" value={this.state.formData.built} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="What do you hope to achieve with your build(s) at JacobsHack! 2021? *" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="achieve" required value={this.state.formData.achieve} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="achieve" required value={this.state.formData.achieve} onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please provide an answer.
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
                   <div className="mb-3">
-                    <Form.Label>Would you like to be part of a team? *</Form.Label><br/>
-                    <Form.Check inline label="Yes" value="Yes" type="radio" name="partTeam" required onChange={this.inputChanged}/>
-                    <Form.Check inline label="No" value="No" type="radio" name="partTeam" onChange={this.inputChanged}/>
+                    <Form.Label>Would you like to be part of a team? *</Form.Label><br />
+                    <Form.Check inline label="Yes" value="Yes" type="radio" name="partTeam" required onChange={this.inputChanged} />
+                    <Form.Check inline label="No" value="No" type="radio" name="partTeam" onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please select an answer.
                     </Form.Control.Feedback>
                   </div>
 
                   <div className="mb-3">
-                    <Form.Label>Do you already have a team? *</Form.Label><br/>
-                    <Form.Check inline label="Yes" value="Yes" type="radio" name="team" required onChange={this.inputChanged}/>
-                    <Form.Check inline label="No" value="No" type="radio" name="team" onChange={this.inputChanged}/>
+                    <Form.Label>Do you already have a team? *</Form.Label><br />
+                    <Form.Check inline label="Yes" value="Yes" type="radio" name="team" required onChange={this.inputChanged} />
+                    <Form.Check inline label="No" value="No" type="radio" name="team" onChange={this.inputChanged} />
                     <Form.Control.Feedback type="invalid">
                       Please select an answer.
                     </Form.Control.Feedback>
@@ -507,12 +518,12 @@ class App extends React.Component {
                   {
                     (this.state.formData.team === true) ?
                       <FloatingLabel label="What are the names of the other team members?" className="mb-3">
-                        <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="teamMembers" value={this.state.formData.teamMembers} onChange={this.inputChanged}/>
+                        <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="teamMembers" value={this.state.formData.teamMembers} onChange={this.inputChanged} />
                       </FloatingLabel>
                       : null
                   }
                 </ListGroup.Item>
-                
+
                 <ListGroup.Item>
                   <h5 className="mb-3 pt-2">Miscellaneous</h5>
 
@@ -544,41 +555,41 @@ class App extends React.Component {
                   </FloatingLabel>
 
                   <FloatingLabel label="Do you have any other needs or special requests?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="needs" value={this.state.formData.needs} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="needs" value={this.state.formData.needs} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="Do you have any additional comments, questions or concerns?" className="mb-3">
-                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="questions" value={this.state.formData.questions} onChange={this.inputChanged}/>
+                    <Form.Control as="textarea" placeholder="..." style={{ height: '100px' }} name="questions" value={this.state.formData.questions} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="How did you hear about the event?" className="mb-3">
-                    <Form.Control type="text" placeholder="..." name="hear" value={this.state.formData.hear} onChange={this.inputChanged}/>
+                    <Form.Control type="text" placeholder="..." name="hear" value={this.state.formData.hear} onChange={this.inputChanged} />
                   </FloatingLabel>
 
                   <FloatingLabel label="Link to LinkedIn Profile" className="mb-3">
-                    <Form.Control type="text" placeholder="LinkedIn" name="linkedin" value={this.state.formData.linkedin} onChange={this.inputChanged}/>
+                    <Form.Control type="text" placeholder="LinkedIn" name="linkedin" value={this.state.formData.linkedin} onChange={this.inputChanged} />
                   </FloatingLabel>
 
-                  <FloatingLabel label="Link to GiHub" className="mb-3">
-                    <Form.Control type="text" placeholder="GitHub" name="github" value={this.state.formData.github} onChange={this.inputChanged}/>
+                  <FloatingLabel label="Link to GitHub" className="mb-3">
+                    <Form.Control type="text" placeholder="GitHub" name="github" value={this.state.formData.github} onChange={this.inputChanged} />
                   </FloatingLabel>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="terms" required inline/>I have read and agreed to the <a href="#" onClick={this.handleShow}>jacobsHack! 2021 Terms & Conditions</a>. *</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="terms" required inline />I have read and agreed to the <a href="#" onClick={this.handleShow}>jacobsHack! 2021 Terms & Conditions</a>. *</Form.Label>
 
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="mlh" required inline/>I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" rel="noopener noreferrer">MLH Code of Conduct</a>. I further agree to the terms of both the <a href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions" rel="noopener noreferrer">MLH Contest Terms and Conditions</a> and the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="mlh" required inline />I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" rel="noopener noreferrer">MLH Code of Conduct</a>. I further agree to the terms of both the <a href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions" rel="noopener noreferrer">MLH Contest Terms and Conditions</a> and the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
 
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="privacy" required inline/>I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, MLH administration, and with my authorization email in-line with the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="privacy" required inline />I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, MLH administration, and with my authorization email in-line with the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
 
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="messages" inline/>I authorize Major League Hacking to send me occasional messages about hackathons.</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="messages" inline />I authorize Major League Hacking to send me occasional messages about hackathons.</Form.Label>
                 </ListGroup.Item>
 
                 <ListGroup.Item id="btns">
                   <Button variant="secondary" size="lg">
-                    <a href="https://jacobshack.com" style={{textDecoration:'none', color:'white'}}>Return to Website</a>
+                    <a href="https://jacobshack.com" style={{ textDecoration: 'none', color: 'white' }}>Return to Website</a>
                   </Button>
-                  
+
                   <Button variant="primary" size="lg" type="submit" onClick={this.handleSubmit}>
                     Register Now
                   </Button>
@@ -589,18 +600,18 @@ class App extends React.Component {
         </div>
 
         <Modal show={this.state.show} onHide={this.handleClose} dialogClassName="modal-90w">
-					<Modal.Header closeButton>
-						<Modal.Title>jacobsHack! 2021 Terms & Conditions</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-            <Terms/>
+          <Modal.Header closeButton>
+            <Modal.Title>jacobsHack! 2021 Terms & Conditions</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Terms />
           </Modal.Body>
-					<Modal.Footer>
-						<Button variant="secondary" onClick={this.handleClose}>
-							Close
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
             </Button>
-					</Modal.Footer>
-				</Modal>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
