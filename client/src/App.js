@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Form, FloatingLabel, Card, ListGroup, Row, Col, Button, Image, Modal } from 'react-bootstrap';
+import { Form, FloatingLabel, Card, ListGroup, Row, Col, Button, Image, Modal, Spinner } from 'react-bootstrap';
 import jhlogo from './jh-logo-colored.png';
 import Terms from './Terms.js';
 import axios from 'axios';
@@ -23,6 +23,7 @@ class App extends React.Component {
       countries: [],
       show: false,
       validated: false,
+      submitting: false,
 
       formData: {
         fullname: '',
@@ -31,7 +32,7 @@ class App extends React.Component {
         pronouns: '',
         nationality: '',
         ethnicity: '',
-        onCampus: false,
+        onCampus: '',
         college: '',
         room: '',
         street: '',
@@ -44,7 +45,7 @@ class App extends React.Component {
         degree: '',
         major: '',
         gradYear: '',
-        exp: false,
+        exp: '',
         prevHack: '',
         whyApply: '',
         drive: '',
@@ -54,8 +55,8 @@ class App extends React.Component {
         weakness: '',
         built: '',
         achieve: '',
-        partTeam: false,
-        team: false,
+        partTeam: '',
+        team: '',
         teamMembers: '',
         diet: '',
         tshirt: '',
@@ -64,10 +65,10 @@ class App extends React.Component {
         hear: '',
         linkedin: '',
         github: '',
-        terms: false,
-        mlh: false,
-        privacy: false,
-        messages: false
+        terms: '',
+        mlh: '',
+        privacy: '',
+        messages: ''
       }
     };
 
@@ -150,48 +151,51 @@ class App extends React.Component {
     }
 
     this.setState({ formData: formInput });
-    console.log(formInput);
+    // console.log(formInput);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    //posting the data
-    axios.post('http://localhost:5000/api/signup', this.state.formData)
-      .then(response => console.log('Registered successfully', response))
-      //redirect
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    this.setState({ validated: true });
 
-    //the code below gave me an error
-
-    // const form = e.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // }
-    // this.setState({ validated: true });
-
-    // fetch('http://localhost:5000/api/signup', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ this.state.formData }),
-    //   headers: { 'Content-Type': 'application/json' },
-    // })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     if (res.status === 200) {
-    //       alert("Registered Successfully");
-    //       // redirection
-    //     }
-    //     else {
-    //       console.log(res.data);
-    //     }
-    //   })
-    //   .catch(error => {
-    //     if (error.response) {
-    //       alert("Couldn't register, please contact: e.kulla@jacobs-university.de");
-    //     }
-    //   });
+    if (this.state.formData.fullname !== null && this.state.formData.birthday !== null
+      && this.state.formData.gender !== null && this.state.formData.pronouns !== null
+      && this.state.formData.nationality && this.state.formData.ethnicity 
+      && this.state.formData.onCampus !== null && this.state.formData.street !== null 
+      && this.state.formData.zip !== null && this.state.formData.city !== null 
+      && this.state.formData.country !== null && this.state.formData.email !== null 
+      && this.state.formData.university !== null && this.state.formData.degree !== null 
+      && this.state.formData.major !== null && this.state.formData.gradYear !== null
+      && this.state.formData.exp !== null && this.state.formData.whyApply !== null
+      && this.state.formData.role !== null && this.state.formData.achieve !== null
+      && this.state.formData.partTeam !== null && this.state.formData.team !== null
+      && this.state.formData.diet !== null && this.state.formData.tshirt !== null
+      && this.state.formData.terms !== null && this.state.formData.mlh !== null
+      && this.state.formData.privacy !== null) {
+        this.setState({ submitting: true });
+        
+        axios.post('http://localhost:5000/api/signup', this.state.formData)
+          .then(response => {
+            this.setState({ submitting: false });
+            console.log('Registered successfully!', response);
+            alert('Registered successfully!', response);
+            }
+          )
+          .catch(error => {
+            this.setState({ submitting: false });
+            console.error('There was an error!', error);
+            alert('There was an error registering you! Please contact e.kulla@jacobs-university.de if you are havin trouble registering.', error);
+          }
+        );
+    }
+    else {
+      alert('Please fill all required fields!')
+    }
   }
 
   render() {
@@ -205,7 +209,7 @@ class App extends React.Component {
         </div>
 
         <div id="intro-text">
-          <h1 style={{ paddingTop: 20 }}>jacobsHack! 2021</h1>
+          <h1 style={{paddingTop:20}}>jacobs<i>Hack</i>! 2021</h1>
           <h2>Registration Form</h2>
         </div>
 
@@ -215,7 +219,6 @@ class App extends React.Component {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h5 className="mb-3 pt-2">Demographics</h5>
-
                   <FloatingLabel label="Full Name *" className="mb-3">
                     <Form.Control type="text" placeholder="Full Name" name="fullname" required value={this.state.formData.fullname} onChange={this.inputChanged} />
                     <Form.Text className="text-muted">
@@ -305,9 +308,9 @@ class App extends React.Component {
                   <h5 className="mb-3 pt-2">Contact Details</h5>
 
                   <div className="mb-3">
-                    <Form.Label>Do you live on Campus? *</Form.Label><br />
-                    <Form.Check inline label="Yes" value="Yes" type="radio" name="onCampus" onChange={this.inputChanged} required />
-                    <Form.Check inline label="No" value="No" type="radio" name="onCampus" onChange={this.inputChanged} />
+                    <Form.Label>Do you live on campus? *</Form.Label><br/>
+                    <Form.Check inline label="Yes" value="Yes" type="radio" name="onCampus" onChange={this.inputChanged} required/>
+                    <Form.Check inline label="No" value="No" type="radio" name="onCampus" onChange={this.inputChanged}/>
                     <Form.Control.Feedback type="invalid">
                       Please select an answer.
                     </Form.Control.Feedback>
@@ -576,13 +579,13 @@ class App extends React.Component {
                 </ListGroup.Item>
 
                 <ListGroup.Item>
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="terms" required inline />I have read and agreed to the <a href="#" onClick={this.handleShow}>jacobsHack! 2021 Terms & Conditions</a>. *</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="terms" required inline value={this.state.formData.terms} onChange={this.inputChanged} />I have read and agreed to the <a href="#" onClick={this.handleShow}>jacobsHack! 2021 Terms & Conditions</a>. *</Form.Label>
 
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="mlh" required inline />I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" rel="noopener noreferrer">MLH Code of Conduct</a>. I further agree to the terms of both the <a href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions" rel="noopener noreferrer">MLH Contest Terms and Conditions</a> and the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="mlh" required inline value={this.state.formData.mlh} onChange={this.inputChanged} />I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" rel="noopener noreferrer">MLH Code of Conduct</a>. I further agree to the terms of both the <a href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions" rel="noopener noreferrer">MLH Contest Terms and Conditions</a> and the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
 
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="privacy" required inline />I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, MLH administration, and with my authorization email in-line with the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="privacy" required inline value={this.state.formData.privacy} onChange={this.inputChanged} />I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, MLH administration, and with my authorization email in-line with the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
 
-                  <Form.Label inline><Form.Check label=" " type="checkbox" name="messages" inline />I authorize Major League Hacking to send me occasional messages about hackathons.</Form.Label>
+                  <Form.Label inline><Form.Check label=" " type="checkbox" name="messages" inline value={this.state.formData.messages} onChange={this.inputChanged} />I authorize Major League Hacking to send me occasional messages about hackathons.</Form.Label>
                 </ListGroup.Item>
 
                 <ListGroup.Item id="btns">
@@ -593,6 +596,12 @@ class App extends React.Component {
                   <Button variant="primary" size="lg" type="submit" onClick={this.handleSubmit}>
                     Register Now
                   </Button>
+
+                  {
+                    (this.state.submitting === true) ?
+                      <h3 style={{textAlign:"center", color:"rgba(127, 150, 218)", paddingTop:30}}><Spinner animation="border" role="status" /> Submitting...</h3>
+                      : null
+                  }
                 </ListGroup.Item>
               </ListGroup>
             </Form>
