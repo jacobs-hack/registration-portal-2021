@@ -6,16 +6,6 @@ import jhlogo from './jh-logo-colored.png';
 import Terms from './Terms.js';
 import axios from 'axios';
 
-/*
-
-TODO
-
-* Connect with backend
-* Success page once form is submitted
-* Deploy
-
-*/
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -594,12 +584,12 @@ class App extends React.Component {
                   </Button>
 
                   <Button variant="primary" size="lg" type="submit" onClick={this.handleSubmit}>
-                    Register Now
+                    Register Now!
                   </Button>
 
                   {
                     (this.state.submitting === true) ?
-                      <h3 style={{textAlign:"center", color:"rgba(127, 150, 218)", paddingTop:30}}><Spinner animation="border" role="status" /> Submitting...</h3>
+                      <h3 style={{ textAlign:"center", color:"rgba(127, 150, 218)", paddingTop:30 }}><Spinner animation="border" role="status" /> Submitting...</h3>
                       : null
                   }
                 </ListGroup.Item>
