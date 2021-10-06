@@ -5,12 +5,13 @@ import { Form, FloatingLabel, Card, ListGroup, Row, Col, Button, Image, Modal, S
 import jhlogo from './jh-logo-colored.png';
 import Terms from './Terms.js';
 import axios from 'axios';
+import { countries_list } from './countries';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countries: [],
+      countries: countries_list,
       show: false,
       validated: false,
       submitting: false,
@@ -66,18 +67,6 @@ class App extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.inputChanged = this.inputChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    fetch("https://restcountries.eu/rest/v2/all")
-      .then(response => response.json())
-      .then(response => {
-        this.setState({ countries: response });
-        // console.log(this.state.countries);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }
 
   handleClose() {
@@ -189,9 +178,6 @@ class App extends React.Component {
   }
 
   render() {
-    let count1 = 0;
-    let count2 = 0;
-
     return (
       <div className="App">
         <div id="img-cont">
@@ -263,8 +249,8 @@ class App extends React.Component {
                         <Form.Select aria-label="Nationality" name="nationality" required value={this.state.formData.nationality} onChange={this.inputChanged}>
                           <option value="" disabled>Select Country</option>
                           {(this.state.countries !== null || this.state.countries !== '') ?
-                            this.state.countries.map(country => (
-                              <option value={country.alpha2Code} key={count1++}>{country.name}</option>
+                            this.state.countries.map((country, key) => (
+                              <option value={country.code} key={key}>{country.name}</option>
                             )) : null
                           }
                         </Form.Select>
@@ -361,8 +347,8 @@ class App extends React.Component {
                         <Form.Select aria-label="Country" name="country" required value={this.state.formData.country} onChange={this.inputChanged}>
                           <option value="0" disabled>Select Country</option>
                           {(this.state.countries !== null || this.state.countries !== '') ?
-                            this.state.countries.map(country => (
-                              <option value={country.alpha2Code} key={count2++}>{country.name}</option>
+                            this.state.countries.map((country, key) => (
+                              <option value={country.code} key={key}>{country.name}</option>
                             )) : null
                           }
                         </Form.Select>
