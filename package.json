@@ -1,7 +1,11 @@
 {
   "name": "registration_backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "A registration website for jacobsHack 2021.",
+  "engines": {
+    "node": "14.x",
+    "npm": "8.x"
+  },
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
