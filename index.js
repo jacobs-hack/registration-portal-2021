@@ -26,8 +26,6 @@ mongoose.connect(url, {
         useUnifiedTopology: true
     }).then(() => {
         console.log('Database connected!');
-        //listening on a port only after a connection has been made
-        app.listen(port, () => console.log(`Example app listening on port ${port}!`));
     })
     .catch(error => console.log('Failed to connect to MongoDB!', error));
 
@@ -40,5 +38,8 @@ if (process.env.NODE_ENV==="production") {
 } else {
     app.get('/', (req, res) => res.send('API is running!'));
 }
+
+//listening on a port only after a connection has been made
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
