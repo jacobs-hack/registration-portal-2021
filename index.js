@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path= require("path");
 const routerUrls = require('./router/router');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -26,8 +27,16 @@ mongoose.connect(url, {
     }).then(() => console.log('Database connected!'))
     .catch(error => console.log('Failed to connect to MongoDB!', error));
 
+//checking if we are in production or not
+if (process.env.NODE_ENV==="production") {
+    app.use(express.static(path.join(__dirname, "/client/build")));
+    app.get("*", (req,res)=> {
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => res.send('API is running!'));
+}
+
 //listening on a port 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
-//router
-app.get('/', (req, res) => res.send('Hello World!'));
