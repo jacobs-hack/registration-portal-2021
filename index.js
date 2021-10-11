@@ -17,7 +17,7 @@ dotenv.config();
 app.use('/api', routeUrls);
 
 //accessing the port number
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 const url = process.env.DATABASE_ACCESS;
 
 //connecting to database

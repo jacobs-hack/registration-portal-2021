@@ -158,7 +158,7 @@ class App extends React.Component {
       && this.state.formData.privacy !== null) {
         this.setState({ submitting: true });
         
-        axios.post('http://localhost:5000/api/signup', this.state.formData)
+        axios.post('/api/signup', this.state.formData)
           .then(response => {
             this.setState({ submitting: false });
             console.log('Registered successfully!', response);
