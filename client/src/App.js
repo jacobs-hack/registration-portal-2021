@@ -161,8 +161,8 @@ class App extends React.Component {
         axios.post('/api/signup', this.state.formData)
           .then(response => {
             this.setState({ submitting: false });
-            console.log('Registered successfully!', response);
-            alert('Registered successfully!', response);
+            console.log('Registered successfully!');
+            alert('Registered successfully!');
             }
           )
           .catch(error => {
