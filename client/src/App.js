@@ -160,7 +160,7 @@ class App extends React.Component {
         
         axios.post('/api/signup', this.state.formData)
           .then(response => {
-            this.setState({ submitting: false });
+            this.setState({ submitting: false});
             console.log('Registered successfully!');
             alert('Registered successfully!');
             }
