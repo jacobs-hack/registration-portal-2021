@@ -52,11 +52,12 @@ router.post('/signup', (request, response) => {
     signedUpUser.save()
         .then(data => {
             console.log("Data saved on the database!")
-            response.json(data)
+            console.log(data);
+            response.sendStatus(200);
         })
         .catch(error => {
-            response.sendStatus(404)
-            response.json(error)
+            console.log(error);
+            response.sendStatus(500);
         })
 })
 

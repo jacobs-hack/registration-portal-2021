@@ -30,7 +30,7 @@ const signUpTemplate = new mongoose.Schema({
     weakness: String,
     built: String,
     achieve: String,
-    partTeam: Boolean,
+    partTeam: String,
     team: Boolean,
     teamMembers: String,
     diet: String,
@@ -50,4 +50,4 @@ const signUpTemplate = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('RegistrationTable', signUpTemplate);
+module.exports = mongoose.model('registrationtables', signUpTemplate);

@@ -24,7 +24,11 @@ const url = process.env.DATABASE_ACCESS;
 mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
-    }).then(() => console.log('Database connected!'))
+    }).then(() => {
+        console.log('Database connected!');
+        //listening on a port only after a connection has been made
+        app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+    })
     .catch(error => console.log('Failed to connect to MongoDB!', error));
 
 //checking if we are in production or not
@@ -37,6 +41,4 @@ if (process.env.NODE_ENV==="production") {
     app.get('/', (req, res) => res.send('API is running!'));
 }
 
-//listening on a port 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
