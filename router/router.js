@@ -40,13 +40,12 @@ router.post('/signup', (request, response) => {
         tshirt: request.body.tshirt,
         needs: request.body.needs,
         questions: request.body.questions,
-        hear: request.body.hear,
         linkedin: request.body.linkedin,
         github: request.body.github,
+        cvlink: request.body.cvlink,
         terms: request.body.terms,
         mlh: request.body.mlh,
         privacy: request.body.privacy,
-        messages: request.body.messages,
 
     })
     signedUpUser.save()
