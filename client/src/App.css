@@ -4,6 +4,10 @@
   font-family: "Roboto Mono";
 }
 
+html{
+  background-color: #b3c3ce;
+}
+
 h1, h2, h5 {
   font-weight: bold;
 }
@@ -59,6 +63,15 @@ label {
   text-align: center;
 }
 
+textarea {
+  min-height: 150px !important;
+}
+
+.registration-success {
+  margin: 3% 30%;
+  background-color: #d7dff3 !important;
+}
+
 @media (max-width: 922px) {
   #form-card {
     width: 95%;
@@ -68,5 +81,21 @@ label {
   #logo {
     padding: 20px;
     width: 80%;
+  }
+  
+  .form-floating>textarea.form-control {
+    padding-top: 50px !important;
+  }
+
+  textarea.form-control {
+    background-color: #bcc9ec !important;
+  }
+
+  *:not(h1, h2, h5, i) {
+    font-size: 14px;
+  }
+
+  .registration-success {
+    margin: 10% 5%;
   }
 }
