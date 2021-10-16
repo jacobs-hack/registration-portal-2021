@@ -553,8 +553,8 @@ class App extends React.Component {
                     </FloatingLabel>
 
                     <Form.Group controlId="formFile" className="mb-3">
-                      <Form.Label>Upload CV</Form.Label>
-                      <Form.Control type="file" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged}/>
+                      <Form.Label>Upload CV (PDF max. 450KB)</Form.Label>
+                      <Form.Control type="file" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged} accept=".pdf" maxFileSize={450000}/>
                     </Form.Group>
 
                     {/* <FloatingLabel label="Link to CV" className="mb-3">
