@@ -552,12 +552,17 @@ class App extends React.Component {
                       <Form.Control type="text" placeholder="GitHub" name="github" value={this.state.formData.github} onChange={this.inputChanged} />
                     </FloatingLabel>
 
-                    <FloatingLabel label="Link to CV" className="mb-3">
+                    <Form.Group controlId="formFile" className="mb-3">
+                      <Form.Label>Upload CV</Form.Label>
+                      <Form.Control type="file" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged}/>
+                    </Form.Group>
+
+                    {/* <FloatingLabel label="Link to CV" className="mb-3">
                       <Form.Control type="text" placeholder="CV" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged} />
                     </FloatingLabel>
                     <Form.Text className="text-muted">
                       Provide a lik to Google Drive or other if you'd like to be reached out by companies.
-                    </Form.Text>
+                    </Form.Text> */}
                   </ListGroup.Item>
 
                   <ListGroup.Item>
