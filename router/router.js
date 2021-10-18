@@ -7,7 +7,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 
 //storing our pdf file inside public folder
-const DIR = path.join(__dirname, 'public');
+const DIR = 'public'
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);
