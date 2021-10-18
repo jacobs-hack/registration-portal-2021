@@ -155,7 +155,7 @@ class App extends React.Component {
       && this.state.formData.partTeam !== null && this.state.formData.team !== null
       && this.state.formData.diet !== null && this.state.formData.tshirt !== null
       && this.state.formData.terms !== null && this.state.formData.mlh !== null
-      && this.state.formData.privacy !== null) {
+      && this.state.formData.privacy !== null && this.state.formData.cvlink !== null) {
         this.setState({ submitting: true });
         
         axios.post('/api/signup', this.state.formData)
@@ -168,7 +168,7 @@ class App extends React.Component {
           .catch(error => {
             this.setState({ submitting: false });
             console.error('There was an error!', error);
-            alert('There was an error registering you! Please contact e.kulla@jacobs-university.de if you are having trouble registering.', error);
+            alert("Please make sure you've filled all required fields. If errors persist, contact e.kulla@jacobs-university.de.", error);
           }
         );
     }
@@ -553,8 +553,8 @@ class App extends React.Component {
                     </FloatingLabel>
 
                     <Form.Group controlId="formFile" className="mb-3">
-                      <Form.Label>Upload CV (PDF max. 450KB)</Form.Label>
-                      <Form.Control type="file" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged} accept=".pdf" maxFileSize={450000}/>
+                      <Form.Label>Upload CV (PDF max. 450KB) *</Form.Label>
+                      <Form.Control required type="file" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged} accept=".pdf" maxFileSize={450000}/>
                     </Form.Group>
 
                     {/* <FloatingLabel label="Link to CV" className="mb-3">
