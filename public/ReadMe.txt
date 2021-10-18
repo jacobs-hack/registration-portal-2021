@@ -1,0 +1,1 @@
+Heroku deletes empty folder, and that is why this .txt was added.
