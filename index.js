@@ -13,6 +13,7 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.use(cors());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 dotenv.config();
 app.use('/api', routeUrls);
 
@@ -21,11 +22,12 @@ const port = process.env.PORT;
 const url = process.env.DATABASE_ACCESS;
 
 //connecting to database
+mongoose.Promise = global.Promise;
 mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
     }).then(() => {
-        console.log('Database connected!');
+        console.log('Database connected successfully!');
     })
     .catch(error => console.log('Failed to connect to MongoDB!', error));
 
@@ -41,5 +43,19 @@ if (process.env.NODE_ENV==="production") {
 
 //listening on a port only after a connection has been made
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+app.use((req, res, next) => {
+    // Error goes via `next()` method
+    setImmediate(() => {
+        next(new Error('Something went wrong'));
+    });
+});
+
+app.use(function (err, req, res, next) {
+    console.error(err.message);
+    if (!err.statusCode) err.statusCode = 500;
+    res.status(err.statusCode).send(err.message);
+});
+
 
 

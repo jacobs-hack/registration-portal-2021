@@ -67,6 +67,15 @@ class App extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.inputChanged = this.inputChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onFileChange = this.onFileChange.bind(this);
+  }
+
+  onFileChange(e) {
+    this.setState(prevState => ({ 
+      formData: {
+        ...prevState.formData,
+        cvlink: e.target.files[0]
+    }}));
   }
 
   handleClose() {
@@ -130,7 +139,6 @@ class App extends React.Component {
     }
 
     this.setState({ formData: formInput });
-    // console.log(formInput);
   }
 
   handleSubmit(e) {
@@ -157,13 +165,19 @@ class App extends React.Component {
       && this.state.formData.terms !== null && this.state.formData.mlh !== null
       && this.state.formData.privacy !== null) {
         this.setState({ submitting: true });
+
+        const newFormData = new FormData();
+
+        for (const [key,value] of Object.entries(this.state.formData)) {
+          newFormData.append(key,value);
+        }
         
-        axios.post('/api/signup', this.state.formData)
+        axios.post('/api/signup', newFormData)
           .then(response => {
             this.setState({ submitting: false});
             this.setState({ submitted: true});
             console.log('Registered successfully!');
-            // alert('Registered successfully!');
+            alert('Registered successfully!');
           })
           .catch(error => {
             this.setState({ submitting: false });
@@ -554,7 +568,7 @@ class App extends React.Component {
 
                     <Form.Group controlId="formFile" className="mb-3">
                       <Form.Label>Upload CV (PDF max. 450KB)</Form.Label>
-                      <Form.Control type="file" name="cvlink" value={this.state.formData.cvlink} onChange={this.inputChanged} accept=".pdf" maxFileSize={450000}/>
+                      <Form.Control type="file" name="cvlink" onChange={this.onFileChange} accept=".pdf" maxFileSize={450000}/>
                     </Form.Group>
 
                     {/* <FloatingLabel label="Link to CV" className="mb-3">
