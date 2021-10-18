@@ -1,0 +1,1 @@
+This is so that heroku doesn't delete public folder.
