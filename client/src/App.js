@@ -210,7 +210,7 @@ class App extends React.Component {
             <Card id="form-card">
               <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>
+                  {/* <ListGroup.Item> */}
                     <h5 className="mb-3 pt-2">Demographics</h5>
                     <FloatingLabel label="Full Name *" className="mb-3">
                       <Form.Control type="text" placeholder="Full Name" name="fullname" required value={this.state.formData.fullname} onChange={this.inputChanged} />
@@ -295,9 +295,11 @@ class App extends React.Component {
                         </FloatingLabel>
                       </Col>
                     </Row>
-                  </ListGroup.Item>
 
-                  <ListGroup.Item>
+                    <hr/>
+                  {/* </ListGroup.Item> */}
+
+                  {/* <ListGroup.Item> */}
                     <h5 className="mb-3 pt-2">Contact Details</h5>
 
                     <div className="mb-3">
@@ -386,9 +388,11 @@ class App extends React.Component {
                     <FloatingLabel label="Phone Number" className="mb-3">
                       <Form.Control type="text" placeholder="+491234567890" name="phone" value={this.state.formData.phone} onChange={this.inputChanged} />
                     </FloatingLabel>
-                  </ListGroup.Item>
+                  {/* </ListGroup.Item> */}
 
-                  <ListGroup.Item>
+                  <hr/>
+
+                  {/* <ListGroup.Item> */}
                     <h5 className="mb-3 pt-2">Education</h5>
 
                     <FloatingLabel label="University *" className="mb-3">
@@ -430,9 +434,11 @@ class App extends React.Component {
                         Please provide your graduation year.
                       </Form.Control.Feedback>
                     </FloatingLabel>
-                  </ListGroup.Item>
+                  {/* </ListGroup.Item> */}
 
-                  <ListGroup.Item>
+                  <hr/>
+
+                  {/* <ListGroup.Item> */}
                     <h5 className="mb-3 pt-2">Experience</h5>
 
                     <div className="mb-3">
@@ -518,9 +524,11 @@ class App extends React.Component {
                         </FloatingLabel>
                         : null
                     }
-                  </ListGroup.Item>
+                  {/* </ListGroup.Item> */}
 
-                  <ListGroup.Item>
+                  <hr/>
+
+                  {/* <ListGroup.Item> */}
                     <h5 className="mb-3 pt-2">Miscellaneous</h5>
 
                     <FloatingLabel label="Dietary Requirements *" className="mb-3">
@@ -577,15 +585,19 @@ class App extends React.Component {
                     <Form.Text className="text-muted">
                       Provide a lik to Google Drive or other if you'd like to be reached out by companies.
                     </Form.Text> */}
-                  </ListGroup.Item>
+                  {/* </ListGroup.Item> */}
 
-                  <ListGroup.Item>
+                  <hr/>
+
+                  {/* <ListGroup.Item> */}
                     <Form.Label inline><Form.Check label=" " type="checkbox" name="terms" required inline value={this.state.formData.terms} onChange={this.inputChanged} />I have read and agreed to the <a href="#" onClick={this.handleShow}>jacobsHack! 2021 Terms & Conditions</a>. *</Form.Label>
 
                     <Form.Label inline><Form.Check label=" " type="checkbox" name="mlh" required inline value={this.state.formData.mlh} onChange={this.inputChanged} />I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="blank_" rel="noopener noreferrer">MLH Code of Conduct</a>. I further agree to the terms of both the <a href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions" target="blank_" rel="noopener noreferrer">MLH Contest Terms and Conditions</a> and the <a href="https://mlh.io/privacy" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
 
                     <Form.Label inline><Form.Check label=" " type="checkbox" name="privacy" required inline value={this.state.formData.privacy} onChange={this.inputChanged} />I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, MLH administration, and with my authorization email in-line with the <a href="https://mlh.io/privacy" target="blank_" rel="noopener noreferrer">MLH Privacy Policy</a>. *</Form.Label>
-                  </ListGroup.Item>
+                  {/* </ListGroup.Item> */}
+
+                  <hr/>
 
                   <ListGroup.Item id="btns">
                     <Button variant="secondary" size="lg">
