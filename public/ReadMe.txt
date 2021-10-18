@@ -1,1 +1,1 @@
-This is so that heroku doesn't delete public folder.
+Heroku deletes empty folder, and that is why this .txt was added.
